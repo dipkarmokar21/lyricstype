@@ -1,0 +1,2185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>type.nitchat.com — Solo, Friend & 1v1 Anonymous Lyrics Race</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #08090d;
+      --surface: rgba(255, 255, 255, 0.035);
+      --surface-strong: rgba(255, 255, 255, 0.065);
+      --border: rgba(255, 255, 255, 0.09);
+      --border-hover: rgba(255, 255, 255, 0.18);
+      --text: #f4f4f7;
+      --muted: #8e92a4;
+      --dim: #4c5063;
+      --accent: #7c6cff;
+      --accent-glow: rgba(124, 108, 255, 0.28);
+      --cyan: #38bdf8;
+      --green: #34d399;
+      --rose: #fb7185;
+      --amber: #fbbf24;
+      --radius: 18px;
+      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      background:
+        radial-gradient(900px 500px at 15% -10%, rgba(124, 108, 255, 0.14), transparent 60%),
+        radial-gradient(700px 450px at 90% 5%, rgba(56, 189, 248, 0.09), transparent 60%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    button, input, textarea {
+      font-family: inherit;
+      color: inherit;
+    }
+
+    .app {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 20px 18px 48px;
+    }
+
+    /* Header */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(15, 17, 25, 0.72);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(18px);
+      margin-bottom: 28px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      cursor: pointer;
+    }
+
+    .brand-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--accent), var(--cyan));
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .brand span.sub {
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+      transition: 0.18s ease;
+    }
+
+    .pill-btn:hover {
+      background: var(--surface-strong);
+      border-color: var(--border-hover);
+    }
+
+    .pill-btn.active {
+      border-color: rgba(124, 108, 255, 0.55);
+      background: rgba(124, 108, 255, 0.14);
+      color: #ddd8ff;
+    }
+
+    /* Views */
+    .view { display: none; animation: fadeUp 0.25s ease; }
+    .view.active { display: block; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Glass Card */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      backdrop-filter: blur(16px);
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: clamp(26px, 4.2vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.035em;
+      line-height: 1.12;
+      margin-bottom: 10px;
+      background: linear-gradient(180deg, #ffffff 30%, #a5abc2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 15px;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* Mode Switcher */
+    .mode-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .mode-card {
+      text-align: left;
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      cursor: pointer;
+      transition: 0.2s ease;
+      position: relative;
+    }
+
+    .mode-card:hover {
+      border-color: var(--border-hover);
+      background: var(--surface-strong);
+      transform: translateY(-1px);
+    }
+
+    .mode-card.selected {
+      border-color: rgba(124, 108, 255, 0.7);
+      background: linear-gradient(180deg, rgba(124, 108, 255, 0.14), rgba(124, 108, 255, 0.04));
+      box-shadow: 0 0 0 1px rgba(124, 108, 255, 0.25), 0 12px 30px -12px var(--accent-glow);
+    }
+
+    .mode-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.07);
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .mode-card.selected .mode-badge {
+      background: rgba(124, 108, 255, 0.24);
+      color: #ddd8ff;
+    }
+
+    .mode-card h3 {
+      font-size: 16px;
+      margin-bottom: 4px;
+      letter-spacing: -0.015em;
+    }
+
+    .mode-card p {
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    /* Lobby Grid */
+    .lobby-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 16px;
+    }
+
+    .section-label {
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 12px;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Avatars */
+    .avatar-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .avatar-option {
+      aspect-ratio: 1;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.025);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: 0.18s ease;
+      padding: 8px;
+    }
+
+    .avatar-option:hover { border-color: var(--border-hover); }
+    .avatar-option.selected {
+      border-color: var(--accent);
+      background: rgba(124, 108, 255, 0.16);
+      box-shadow: 0 0 18px var(--accent-glow);
+    }
+
+    .input-group { margin-bottom: 14px; }
+    .input-group label {
+      display: block;
+      font-size: 12.5px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .field {
+      width: 100%;
+      padding: 11px 13px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.35);
+      font-size: 14px;
+      outline: none;
+      transition: 0.18s;
+    }
+
+    .field:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(124, 108, 255, 0.15);
+    }
+
+    /* Segmented */
+    .segmented {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      padding: 4px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border);
+    }
+
+    .seg-btn {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      padding: 8px 6px;
+      border-radius: 9px;
+      font-size: 12.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.18s;
+    }
+
+    .seg-btn.active {
+      background: var(--surface-strong);
+      color: var(--text);
+    }
+
+    /* Track list */
+    .track-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 280px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .track-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 13px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.02);
+      cursor: pointer;
+      transition: 0.18s;
+    }
+
+    .track-item:hover {
+      background: var(--surface-strong);
+      border-color: var(--border-hover);
+    }
+
+    .track-item.selected {
+      border-color: rgba(56, 189, 248, 0.65);
+      background: rgba(56, 189, 248, 0.09);
+    }
+
+    .track-meta h4 { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+    .track-meta span { font-size: 12px; color: var(--muted); }
+
+    .track-tag {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    /* Mode Specific Action Panel */
+    .action-panel {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 13px 18px;
+      border-radius: 13px;
+      border: none;
+      background: linear-gradient(135deg, var(--accent), #5b4bff);
+      color: #fff;
+      font-size: 14.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s ease;
+      box-shadow: 0 8px 24px -8px var(--accent-glow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.08);
+    }
+
+    .btn-secondary {
+      padding: 11px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface-strong);
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.18s;
+    }
+
+    .btn-secondary:hover { border-color: var(--border-hover); background: rgba(255,255,255,0.1); }
+
+    .friend-actions {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .divider-text {
+      text-align: center;
+      font-size: 12px;
+      color: var(--dim);
+      margin: 12px 0;
+      position: relative;
+    }
+
+    /* Waiting / Matchmaking View */
+    .center-box {
+      max-width: 580px;
+      margin: 24px auto;
+      text-align: center;
+    }
+
+    .radar {
+      width: 84px;
+      height: 84px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      border: 1px solid rgba(124, 108, 255, 0.45);
+      display: grid;
+      place-items: center;
+      position: relative;
+    }
+
+    .radar::after {
+      content: "";
+      position: absolute;
+      inset: -12px;
+      border-radius: 50%;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      animation: pulse 1.6s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(0.85); opacity: 0.9; }
+      100% { transform: scale(1.35); opacity: 0; }
+    }
+
+    .room-code-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 18px;
+      border-radius: 14px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px dashed rgba(124, 108, 255, 0.55);
+      margin: 16px 0;
+    }
+
+    .room-code {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--cyan);
+    }
+
+    .versus-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 14px;
+      margin: 22px 0;
+    }
+
+    .player-slot {
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    .player-slot.ready {
+      border-color: rgba(52, 211, 153, 0.5);
+      background: rgba(52, 211, 153, 0.06);
+    }
+
+    .slot-avatar {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 8px;
+    }
+
+    .vs-pill {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+
+    /* Arena View */
+    .arena-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .hud-stats {
+      display: flex;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .stat {
+      text-align: center;
+      min-width: 58px;
+    }
+
+    .stat .val {
+      font-family: var(--font-mono);
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .stat .lbl {
+      font-size: 10.5px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* Race Track */
+    .race-tracks {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .racer-row {
+      display: grid;
+      grid-template-columns: 120px 1fr 68px;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+    }
+
+    .racer-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mini-avatar { width: 24px; height: 24px; flex-shrink: 0; }
+
+    .track-bar {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      position: relative;
+      overflow: visible;
+    }
+
+    .track-fill {
+      height: 100%;
+      border-radius: 999px;
+      width: 0%;
+      transition: width 0.16s linear;
+    }
+
+    .track-fill.me { background: linear-gradient(90deg, var(--accent), var(--cyan)); }
+    .track-fill.opp { background: linear-gradient(90deg, #f472b6, var(--amber)); }
+
+    .track-wpm {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    /* Optional YouTube Player */
+    .yt-wrap {
+      margin-bottom: 16px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: #000;
+      aspect-ratio: 16 / 6;
+      max-height: 220px;
+      display: none;
+    }
+
+    .yt-wrap.visible { display: block; }
+    .yt-wrap iframe { width: 100%; height: 100%; border: 0; }
+
+    /* Typing Box */
+    .typing-stage {
+      position: relative;
+      padding: 38px 26px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: rgba(12, 14, 22, 0.78);
+      text-align: center;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      cursor: text;
+      overflow: hidden;
+    }
+
+    .typing-stage.shake { animation: shake 0.18s linear; }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
+    }
+
+    .line-counter {
+      position: absolute;
+      top: 14px;
+      left: 18px;
+      font-size: 12px;
+      color: var(--muted);
+      font-family: var(--font-mono);
+    }
+
+    .combo-badge {
+      position: absolute;
+      top: 12px;
+      right: 18px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--amber);
+      opacity: 0;
+      transform: scale(0.9);
+      transition: 0.15s;
+    }
+
+    .combo-badge.show { opacity: 1; transform: scale(1); }
+
+    .prev-line {
+      font-size: 14px;
+      color: var(--dim);
+      min-height: 22px;
+      margin-bottom: 10px;
+    }
+
+    .active-line {
+      font-family: var(--font-mono);
+      font-size: clamp(18px, 2.6vw, 25px);
+      line-height: 1.65;
+      letter-spacing: 0.01em;
+      user-select: none;
+      margin-bottom: 12px;
+      word-break: break-word;
+    }
+
+    .next-line {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      color: var(--dim);
+      min-height: 22px;
+    }
+
+    .char {
+      position: relative;
+      color: #6b7086;
+      transition: color 0.07s;
+    }
+
+    .char.correct { color: var(--cyan); }
+    .char.wrong { color: var(--rose); background: rgba(251, 113, 133, 0.16); border-radius: 3px; }
+    .char.current {
+      color: #fff;
+      border-bottom: 2px solid var(--accent);
+    }
+
+    .char.opp-cursor::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 2px;
+      bottom: 2px;
+      width: 2px;
+      background: var(--amber);
+      box-shadow: 0 0 8px var(--amber);
+    }
+
+    .countdown-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(8, 9, 13, 0.86);
+      backdrop-filter: blur(8px);
+      display: none;
+      place-items: center;
+      z-index: 10;
+    }
+
+    .countdown-overlay.show { display: grid; }
+    .countdown-num {
+      font-size: 64px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      color: var(--cyan);
+    }
+
+    .hidden-input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+      height: 1px;
+      width: 1px;
+    }
+
+    .typing-hint {
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    /* Result & NitChat Funnel */
+    .result-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .result-grid.solo-only {
+      grid-template-columns: 1fr;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .result-banner {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 6px;
+    }
+
+    .stats-cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin: 18px 0;
+    }
+
+    .mini-stat {
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+    }
+
+    .mini-stat .big {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .mini-stat .small {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Chat Panel */
+    .chat-box {
+      display: flex;
+      flex-direction: column;
+      height: 360px;
+    }
+
+    .chat-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 12px;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 4px;
+      margin-bottom: 12px;
+    }
+
+    .msg {
+      max-width: 82%;
+      padding: 9px 13px;
+      border-radius: 14px;
+      font-size: 13.5px;
+      line-height: 1.45;
+    }
+
+    .msg.me {
+      align-self: flex-end;
+      background: var(--accent);
+      color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+
+    .msg.them {
+      align-self: flex-start;
+      background: var(--surface-strong);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+    }
+
+    .msg.sys {
+      align-self: center;
+      font-size: 11.5px;
+      color: var(--muted);
+      background: transparent;
+      padding: 4px 8px;
+    }
+
+    .chat-form {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      display: none;
+      place-items: center;
+      z-index: 50;
+      padding: 16px;
+    }
+
+    .modal-backdrop.open { display: grid; }
+    .modal {
+      width: 100%;
+      max-width: 500px;
+      background: #10121b;
+      border: 1px solid var(--border-hover);
+      border-radius: 20px;
+      padding: 22px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #171a26;
+      border: 1px solid var(--border-hover);
+      padding: 10px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.25s ease;
+      z-index: 60;
+    }
+
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 780px) {
+      .mode-grid, .lobby-grid, .result-grid { grid-template-columns: 1fr; }
+      .racer-row { grid-template-columns: 92px 1fr 56px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="brand" id="goHomeBtn">
+        <div class="brand-dot">♪</div>
+        <div>type<span class="sub">.nitchat.com</span></div>
+      </div>
+      <div class="top-actions">
+        <button class="pill-btn" id="openCustomModalBtn">+ Custom Track</button>
+        <button class="pill-btn active" id="soundToggleBtn">Sound: ON</button>
+      </div>
+    </header>
+
+    <!-- VIEW 1: LOBBY -->
+    <section id="view-lobby" class="view active">
+      <div class="hero">
+        <h1>Type the Rhythm. Meet the Vibe.</h1>
+        <p>Practice solo, create a private room with friends, or jump into a 1v1 anonymous lyrics race & chat on NitChat.</p>
+      </div>
+
+      <!-- 3 Game Modes -->
+      <div class="mode-grid">
+        <button class="mode-card selected" data-mode="solo">
+          <span class="mode-badge">SOLO CHILL</span>
+          <h3>Single Player</h3>
+          <p>Zero pressure. Type at your own pace, track WPM, combo & beat your personal best.</p>
+        </button>
+        <button class="mode-card" data-mode="friend">
+          <span class="mode-badge">PRIVATE ROOM</span>
+          <h3>Chill with Friend</h3>
+          <p>Create a room code, share the link, race live side-by-side & hang out in room chat.</p>
+        </button>
+        <button class="mode-card" data-mode="stranger">
+          <span class="mode-badge">1V1 ANONYMOUS</span>
+          <h3>Match a Stranger</h3>
+          <p>Race someone with the same music taste & unlock an anonymous NitChat after finishing.</p>
+        </button>
+      </div>
+
+      <div class="lobby-grid">
+        <!-- Left: Profile & Mode Controls -->
+        <div class="card">
+          <div class="section-label">
+            <span>Your Anonymous Persona</span>
+            <span id="pbLabel" style="color: var(--cyan);">Best: 0 WPM</span>
+          </div>
+
+          <div class="avatar-row" id="avatarPicker"></div>
+
+          <div class="input-group">
+            <label for="handleInput">Display Handle</label>
+            <input id="handleInput" class="field" maxlength="18" placeholder="e.g. midnight_drifter" />
+          </div>
+
+          <div class="input-group" id="tierWrapper" style="display: none;">
+            <label>Opponent Speed Tier</label>
+            <div class="segmented" id="tierPicker">
+              <button class="seg-btn" data-tier="chill">Chill (~38)</button>
+              <button class="seg-btn active" data-tier="balanced">Balanced (~56)</button>
+              <button class="seg-btn" data-tier="pro">Pro (~78)</button>
+            </div>
+          </div>
+
+          <!-- Dynamic Action Area -->
+          <div class="action-panel">
+            <!-- Solo Action -->
+            <div id="panel-solo">
+              <button class="btn-primary" id="startSoloBtn">Start Solo Session →</button>
+            </div>
+
+            <!-- Friend Action -->
+            <div id="panel-friend" style="display: none;">
+              <button class="btn-primary" id="createRoomBtn">Create Private Room</button>
+              <div class="divider-text">OR JOIN A FRIEND'S ROOM</div>
+              <div class="friend-actions">
+                <input id="joinCodeInput" class="field" placeholder="Enter Room Code (e.g. NIT-4K8)" style="text-transform: uppercase; font-family: var(--font-mono);" />
+                <button class="btn-secondary" id="joinRoomBtn">Join</button>
+              </div>
+            </div>
+
+            <!-- Stranger Action -->
+            <div id="panel-stranger" style="display: none;">
+              <button class="btn-primary" id="findStrangerBtn">Find Anonymous Match →</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Track Selector -->
+        <div class="card">
+          <div class="section-label">
+            <span>Select Lyrics Track</span>
+            <span id="trackCount">4 tracks</span>
+          </div>
+          <div class="track-list" id="trackList"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: WAITING / MATCHMAKING ROOM -->
+    <section id="view-waiting" class="view">
+      <div class="card center-box">
+        <div id="strangerSearchUI" style="display: none;">
+          <div class="radar">♪</div>
+          <h2 style="margin-bottom: 6px;">Scanning NitChat Vibe Queue...</h2>
+          <p id="searchStatusText" style="color: var(--muted); font-size: 14px;">Looking for someone vibing to the same track</p>
+        </div>
+
+        <div id="friendRoomUI" style="display: none;">
+          <span class="mode-badge" style="background: rgba(56,189,248,0.16); color: var(--cyan);">PRIVATE FRIEND ROOM</span>
+          <h2 id="roomTrackTitle" style="margin-top: 6px;">Track Name</h2>
+          <p style="color: var(--muted); font-size: 13.5px; margin-top: 4px;">
+            Share the code or open this page in a <strong>second browser tab</strong> to race live!
+          </p>
+
+          <div class="room-code-box">
+            <span class="room-code" id="displayRoomCode">NIT-000</span>
+            <button class="pill-btn" id="copyCodeBtn">Copy Link</button>
+          </div>
+
+          <div class="versus-row">
+            <div class="player-slot ready">
+              <div class="slot-avatar" id="hostSlotAvatar"></div>
+              <div id="hostSlotName" style="font-weight: 600; font-size: 14px;">You</div>
+              <div style="font-size: 11.5px; color: var(--green); margin-top: 4px;">Host • Ready</div>
+            </div>
+            <div class="vs-pill">VS</div>
+            <div class="player-slot" id="guestSlot">
+              <div class="slot-avatar" id="guestSlotAvatar"></div>
+              <div id="guestSlotName" style="font-weight: 600; font-size: 14px; color: var(--muted);">Waiting...</div>
+              <div id="guestSlotStatus" style="font-size: 11.5px; color: var(--muted); margin-top: 4px;">Invite a friend</div>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+            <button class="btn-primary" id="startFriendRaceBtn" style="max-width: 240px;" disabled>Waiting for Friend...</button>
+            <button class="btn-secondary" id="simulateFriendBtn">Simulate Friend (1-Tab Test)</button>
+            <button class="btn-secondary" id="leaveRoomBtn">Leave</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 3: TYPING ARENA -->
+    <section id="view-arena" class="view">
+      <div class="arena-head">
+        <div>
+          <div style="font-size: 16px; font-weight: 600;" id="arenaTrackTitle">Track</div>
+          <div style="font-size: 12.5px; color: var(--muted);" id="arenaModeLabel">Solo Chill Mode</div>
+        </div>
+
+        <div class="hud-stats">
+          <div class="stat"><div class="val" id="hudWpm">0</div><div class="lbl">WPM</div></div>
+          <div class="stat"><div class="val" id="hudAcc">100%</div><div class="lbl">ACC</div></div>
+          <div class="stat"><div class="val" id="hudScore">0</div><div class="lbl">SCORE</div></div>
+          <div class="stat"><div class="val" id="hudTime">0:00</div><div class="lbl">TIME</div></div>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <button class="pill-btn" id="toggleVideoBtn" style="display: none;">Hide Video</button>
+          <button class="pill-btn" id="exitArenaBtn">Exit</button>
+        </div>
+      </div>
+
+      <!-- Race Progress Bars -->
+      <div class="card" style="padding: 14px 18px; margin-bottom: 16px;">
+        <div class="race-tracks">
+          <div class="racer-row">
+            <div class="racer-name">
+              <span class="mini-avatar" id="meTrackAvatar"></span>
+              <span id="meTrackName">You</span>
+            </div>
+            <div class="track-bar"><div class="track-fill me" id="meTrackFill"></div></div>
+            <div class="track-wpm" id="meTrackWpm">0 WPM</div>
+          </div>
+
+          <div class="racer-row" id="oppTrackRow">
+            <div class="racer-name">
+              <span class="mini-avatar" id="oppTrackAvatar"></span>
+              <span id="oppTrackName">Opponent</span>
+            </div>
+            <div class="track-bar"><div class="track-fill opp" id="oppTrackFill"></div></div>
+            <div class="track-wpm" id="oppTrackWpm">0 WPM</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Optional YouTube Video -->
+      <div class="yt-wrap" id="ytWrap">
+        <iframe id="ytFrame" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+      </div>
+
+      <!-- Typing Stage -->
+      <div class="typing-stage" id="typingStage">
+        <div class="line-counter" id="lineCounter">Line 1 / 6</div>
+        <div class="combo-badge" id="comboBadge">0x COMBO</div>
+
+        <div class="prev-line" id="prevLine"></div>
+        <div class="active-line" id="activeLine"></div>
+        <div class="next-line" id="nextLine"></div>
+
+        <input id="mobileInput" class="hidden-input" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+
+        <div class="countdown-overlay" id="countdownOverlay">
+          <div class="countdown-num" id="countdownNum">3</div>
+        </div>
+      </div>
+
+      <div class="typing-hint">Just start typing on your keyboard (or tap the box on mobile) • Backspace fixes typos</div>
+    </section>
+
+    <!-- VIEW 4: RESULT & NITCHAT -->
+    <section id="view-result" class="view">
+      <div class="result-grid" id="resultGrid">
+        <!-- Left: Summary -->
+        <div class="card">
+          <span class="mode-badge" id="resultBadge">SESSION COMPLETE</span>
+          <div class="result-banner" id="resultTitle">Great Flow!</div>
+          <p id="resultSubtitle" style="color: var(--muted); font-size: 14px;"></p>
+
+          <div class="stats-cards">
+            <div class="mini-stat"><div class="big" id="resWpm" style="color: var(--cyan);">0</div><div class="small">Words Per Minute</div></div>
+            <div class="mini-stat"><div class="big" id="resAcc" style="color: var(--green);">100%</div><div class="small">Accuracy</div></div>
+            <div class="mini-stat"><div class="big" id="resCombo" style="color: var(--amber);">0</div><div class="small">Max Combo</div></div>
+            <div class="mini-stat"><div class="big" id="resScore">0</div><div class="small">Total Score</div></div>
+          </div>
+
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="btn-primary" id="playAgainBtn" style="flex: 1;">Play Again</button>
+            <button class="btn-secondary" id="backLobbyBtn">Back to Lobby</button>
+          </div>
+        </div>
+
+        <!-- Right: Post-Match NitChat (Friend or Stranger) -->
+        <div class="card chat-box" id="chatCard">
+          <div class="chat-head">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span class="mini-avatar" id="chatOppAvatar"></span>
+              <div>
+                <div id="chatOppName" style="font-size: 14px; font-weight: 600;">Anonymous</div>
+                <div id="chatStatus" style="font-size: 11.5px; color: var(--green);">Connected via NitChat</div>
+              </div>
+            </div>
+            <button class="pill-btn" id="revealBtn">Mutual Reveal</button>
+          </div>
+
+          <div class="chat-messages" id="chatMessages"></div>
+
+          <form class="chat-form" id="chatForm">
+            <input id="chatInput" class="field" placeholder="Say hi or talk about this track..." autocomplete="off" />
+            <button class="btn-secondary" type="submit">Send</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Custom Track Modal -->
+  <div class="modal-backdrop" id="customModal">
+    <div class="modal">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+        <h3 style="font-size: 17px;">Add Custom Track</h3>
+        <button class="pill-btn" id="closeCustomModalBtn">✕</button>
+      </div>
+      <div class="input-group">
+        <label>Track Title</label>
+        <input id="customTitle" class="field" placeholder="e.g. Late Night Acoustic" />
+      </div>
+      <div class="input-group">
+        <label>Artist / Creator</label>
+        <input id="customArtist" class="field" placeholder="e.g. Indie Session" />
+      </div>
+      <div class="input-group">
+        <label>YouTube Link or Video ID (Optional)</label>
+        <input id="customYt" class="field" placeholder="https://youtube.com/watch?v=... or 11-char ID" />
+      </div>
+      <div class="input-group">
+        <label>Lyrics (one line per verse)</label>
+        <textarea id="customLyrics" class="field" rows="5" placeholder="Paste your lyrics lines here..."></textarea>
+      </div>
+      <button class="btn-primary" id="saveCustomTrackBtn">Save & Select Track</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // =========================================================================
+    // 1. AVATARS (Minimalist SVG Characters for NitChat)
+    // =========================================================================
+    const AVATARS = [
+      `<svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="18" fill="#1E1B3A"/><circle cx="32" cy="34" r="18" fill="#A5B4FC"/><circle cx="26" cy="32" r="2.5" fill="#1E1B3A"/><circle cx="38" cy="32" r="2.5" fill="#1E1B3A"/><path d="M27 40C29.5 42.5 34.5 42.5 37 40" stroke="#1E1B3A" stroke-width="2.5" stroke-linecap="round"/><path d="M18 24C21 16 43 16 46 24" stroke="#7C6CFF" stroke-width="4" stroke-linecap="round"/></svg>`,
+      `<svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="18" fill="#122634"/><circle cx="32" cy="35" r="17" fill="#7DD3FC"/><path d="M17 26L21 15L29 22" fill="#38BDF8"/><path d="M47 26L43 15L35 22" fill="#38BDF8"/><circle cx="26" cy="34" r="2.4" fill="#0F172A"/><circle cx="38" cy="34" r="2.4" fill="#0F172A"/><path d="M29 40Q32 43 35 40" stroke="#0F172A" stroke-width="2.4" stroke-linecap="round"/></svg>`,
+      `<svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="18" fill="#2A192E"/><circle cx="32" cy="34" r="18" fill="#F9A8D4"/><rect x="20" y="29" width="10" height="7" rx="3.5" stroke="#2A192E" stroke-width="2.2"/><rect x="34" y="29" width="10" height="7" rx="3.5" stroke="#2A192E" stroke-width="2.2"/><path d="M30 32.5H34" stroke="#2A192E" stroke-width="2.2"/><path d="M28 42C30.5 43.5 33.5 43.5 36 42" stroke="#2A192E" stroke-width="2.2" stroke-linecap="round"/></svg>`,
+      `<svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="18" fill="#162925"/><circle cx="32" cy="34" r="18" fill="#6EE7B7"/><circle cx="26" cy="33" r="2.5" fill="#064E3B"/><circle cx="38" cy="33" r="2.5" fill="#064E3B"/><circle cx="21" cy="37" r="2.5" fill="#34D399"/><circle cx="43" cy="37" r="2.5" fill="#34D399"/><path d="M28 40H36" stroke="#064E3B" stroke-width="2.5" stroke-linecap="round"/></svg>`
+    ];
+
+    // =========================================================================
+    // 2. ORIGINAL DEMO TRACKS (Royalty-Free / Safe Demo Lyrics)
+    // =========================================================================
+    const TRACKS = [
+      {
+        id: 'midnight-signal',
+        title: 'Midnight Signal',
+        artist: 'Nova Drift',
+        tag: 'Synth Pop',
+        youtubeId: '',
+        lines: [
+          'Neon rain falls softly on the window glass',
+          'Watching quiet city headlights slowly pass',
+          'Every midnight frequency feels warm and clear',
+          'Typing out the rhythm till the dawn is near',
+          'No more noise or static pulling at my mind',
+          'Leaving every heavy shadow far behind'
+        ]
+      },
+      {
+        id: 'coffee-static',
+        title: 'Coffee & Static',
+        artist: 'Lumen Park',
+        tag: 'Lo-Fi Chill',
+        youtubeId: '',
+        lines: [
+          'Cold cup sitting by the glowing monitor',
+          'Half past two and still awake on the floor',
+          'Small green cursor blinking on a velvet screen',
+          'Chasing every melody I have ever seen',
+          'Maybe someone far away is up tonight',
+          'Listening to the same soft silver light'
+        ]
+      },
+      {
+        id: 'nil-akash-train',
+        title: 'Nil Akash, Slow Train',
+        artist: 'Dhaka Echoes',
+        tag: 'Bangla Indie',
+        youtubeId: '',
+        lines: [
+          'Rater shohore halka brishti pore jay',
+          'Janalar pashe boshe gaaner shur khuje pai',
+          'Slow train moving through the misty silver night',
+          'Every quiet street lamp burning soft and bright',
+          'Shobdo gulo mile jay notun ekta taale',
+          'Choto ekta golpo lekha moner deyaale'
+        ]
+      },
+      {
+        id: 'velocity-zero',
+        title: 'Velocity Zero',
+        artist: 'Kairo & The Waves',
+        tag: 'Fast Tempo',
+        youtubeId: '',
+        lines: [
+          'Fingers flying fast across the matte black keys',
+          'Catching every cadence like a summer breeze',
+          'Zero hesitation when the chorus starts to climb',
+          'Locking every syllable directly into time',
+          'Static fades away and only focus stays',
+          'Racing through the echo of electric days'
+        ]
+      }
+    ];
+
+    const STRANGER_POOL = [
+      { name: 'velvet_echo', avatarIdx: 1, tag: 'Late Night Synth' },
+      { name: 'pixel_monsoon', avatarIdx: 2, tag: 'Indie Acoustic' },
+      { name: 'orbit_99', avatarIdx: 3, tag: 'Lo-Fi & Code' },
+      { name: 'quiet_chord', avatarIdx: 0, tag: 'Midnight Tea' }
+    ];
+
+    // =========================================================================
+    // 3. APP STATE & REALTIME TRANSPORT (BroadcastChannel for Live 2-Tab Friend Mode)
+    //    Production tip: Swap `channel.postMessage` with Socket.io / Supabase Realtime
+    // =========================================================================
+    const MY_CLIENT_ID = 'u_' + Math.random().toString(36).slice(2, 9);
+    const channel = new BroadcastChannel('nitchat_type_realtime_v1');
+
+    const state = {
+      mode: 'solo',          // 'solo' | 'friend' | 'stranger'
+      selectedTrackId: TRACKS[0].id,
+      avatarIdx: 0,
+      handle: localStorage.getItem('nitchat_handle') || 'anon_' + Math.floor(100 + Math.random() * 899),
+      tier: 'balanced',
+      soundOn: true,
+      personalBest: Number(localStorage.getItem('nitchat_pb') || 0),
+
+      // Room / Opponent state
+      roomCode: null,
+      isHost: false,
+      isSimulatedOpponent: false,
+      opponent: null,        // { id, name, avatarIdx, charIndex, wpm, finished, revealed }
+      meRevealed: false,
+
+      // Typing Engine state
+      raceActive: false,
+      lines: [],
+      totalChars: 0,
+      lineIdx: 0,
+      charIdx: 0,
+      globalTypedChars: 0,
+      correctKeystrokes: 0,
+      totalKeystrokes: 0,
+      combo: 0,
+      maxCombo: 0,
+      score: 0,
+      startTime: null,
+      timerInterval: null,
+      ghostInterval: null,
+      lastBroadcastAt: 0
+    };
+
+    // =========================================================================
+    // 4. WEB AUDIO SOUND ENGINE (Zero External Audio Files Needed)
+    // =========================================================================
+    let audioCtx = null;
+    function playTone(freq, duration = 0.04, type = 'sine', gainVal = 0.045) {
+      if (!state.soundOn) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (_) {}
+    }
+
+    // =========================================================================
+    // 5. UI HELPERS & RENDERING
+    // =========================================================================
+    const $ = (id) => document.getElementById(id);
+
+    function showToast(msg) {
+      const t = $('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      clearTimeout(t._timer);
+      t._timer = setTimeout(() => t.classList.remove('show'), 2400);
+    }
+
+    function showView(viewId) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      $(viewId).classList.add('active');
+    }
+
+    function getSelectedTrack() {
+      return TRACKS.find(t => t.id === state.selectedTrackId) || TRACKS[0];
+    }
+
+    function renderAvatars() {
+      $('avatarPicker').innerHTML = AVATARS.map((svg, i) => `
+        <button class="avatar-option ${i === state.avatarIdx ? 'selected' : ''}" data-idx="${i}" title="Avatar ${i + 1}">
+          ${svg}
+        </button>
+      `).join('');
+
+      $('avatarPicker').querySelectorAll('.avatar-option').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.avatarIdx = Number(btn.dataset.idx);
+          renderAvatars();
+        });
+      });
+    }
+
+    function renderTracks() {
+      $('trackCount').textContent = `${TRACKS.length} tracks`;
+      $('trackList').innerHTML = TRACKS.map(t => `
+        <div class="track-item ${t.id === state.selectedTrackId ? 'selected' : ''}" data-id="${t.id}">
+          <div class="track-meta">
+            <h4>${escapeHtml(t.title)}</h4>
+            <span>${escapeHtml(t.artist)} • ${t.lines.length} lines${t.youtubeId ? ' • YouTube' : ''}</span>
+          </div>
+          <span class="track-tag">${escapeHtml(t.tag)}</span>
+        </div>
+      `).join('');
+
+      $('trackList').querySelectorAll('.track-item').forEach(item => {
+        item.addEventListener('click', () => {
+          state.selectedTrackId = item.dataset.id;
+          renderTracks();
+        });
+      });
+    }
+
+    function updateModeUI() {
+      document.querySelectorAll('.mode-card').forEach(c => {
+        c.classList.toggle('selected', c.dataset.mode === state.mode);
+      });
+      $('panel-solo').style.display = state.mode === 'solo' ? 'block' : 'none';
+      $('panel-friend').style.display = state.mode === 'friend' ? 'block' : 'none';
+      $('panel-stranger').style.display = state.mode === 'stranger' ? 'block' : 'none';
+      $('tierWrapper').style.display = state.mode === 'stranger' ? 'block' : 'none';
+    }
+
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
+    }
+
+    function extractYoutubeId(input) {
+      if (!input) return '';
+      const trimmed = input.trim();
+      if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) return trimmed;
+      const match = trimmed.match(/(?:v=|youtu\.be\/|embed\/)([a-zA-Z0-9_-]{11})/);
+      return match ? match[1] : '';
+    }
+
+    // =========================================================================
+    // 6. FRIEND PRIVATE ROOM LOGIC (Live Cross-Tab via BroadcastChannel)
+    // =========================================================================
+    function generateRoomCode() {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let code = 'NIT-';
+      for (let i = 0; i < 3; i++) code += chars[Math.floor(Math.random() * chars.length)];
+      return code;
+    }
+
+    function createFriendRoom() {
+      saveHandle();
+      state.mode = 'friend';
+      state.isHost = true;
+      state.isSimulatedOpponent = false;
+      state.roomCode = generateRoomCode();
+      state.opponent = null;
+
+      openFriendWaitingRoom();
+      // Update URL cleanly so copying URL shares the room
+      history.replaceState(null, '', `?room=${state.roomCode}`);
+    }
+
+    function joinFriendRoom(codeInput) {
+      saveHandle();
+      const code = codeInput.trim().toUpperCase();
+      if (!code || code.length < 4) {
+        showToast('Enter a valid room code first');
+        return;
+      }
+      state.mode = 'friend';
+      state.isHost = false;
+      state.isSimulatedOpponent = false;
+      state.roomCode = code;
+      state.opponent = null;
+
+      openFriendWaitingRoom();
+      $('startFriendRaceBtn').textContent = 'Connecting to Host...';
+      $('startFriendRaceBtn').disabled = true;
+      $('simulateFriendBtn').style.display = 'none';
+
+      // Ask host for room state
+      channel.postMessage({
+        type: 'JOIN_REQ',
+        roomCode: state.roomCode,
+        senderId: MY_CLIENT_ID,
+        player: { id: MY_CLIENT_ID, name: state.handle, avatarIdx: state.avatarIdx }
+      });
+
+      // Timeout feedback if no host tab is open
+      setTimeout(() => {
+        if (!state.opponent && $('view-waiting').classList.contains('active')) {
+          showToast('No host tab found for that code — open host tab first!');
+        }
+      }, 2200);
+    }
+
+    function openFriendWaitingRoom() {
+      showView('view-waiting');
+      $('strangerSearchUI').style.display = 'none';
+      $('friendRoomUI').style.display = 'block';
+
+      const track = getSelectedTrack();
+      $('roomTrackTitle').textContent = `${track.title} — ${track.artist}`;
+      $('displayRoomCode').textContent = state.roomCode;
+
+      $('hostSlotAvatar').innerHTML = AVATARS[state.avatarIdx];
+      $('hostSlotName').textContent = state.handle + (state.isHost ? ' (You)' : '');
+
+      $('guestSlot').classList.remove('ready');
+      $('guestSlotAvatar').innerHTML = '';
+      $('guestSlotName').textContent = 'Waiting...';
+      $('guestSlotStatus').textContent = 'Share code or open 2nd tab';
+      $('startFriendRaceBtn').disabled = true;
+      $('startFriendRaceBtn').textContent = state.isHost ? 'Waiting for Friend...' : 'Waiting for Host to Start...';
+      $('simulateFriendBtn').style.display = state.isHost ? 'inline-block' : 'none';
+    }
+
+    function renderGuestConnected() {
+      if (!state.opponent) return;
+      $('guestSlot').classList.add('ready');
+      $('guestSlotAvatar').innerHTML = AVATARS[state.opponent.avatarIdx];
+      $('guestSlotName').textContent = state.opponent.name;
+      $('guestSlotStatus').textContent = 'Joined • Ready';
+      $('guestSlotStatus').style.color = 'var(--green)';
+
+      if (state.isHost) {
+        $('startFriendRaceBtn').disabled = false;
+        $('startFriendRaceBtn').textContent = 'Start Race Now →';
+      } else {
+        $('startFriendRaceBtn').disabled = true;
+        $('startFriendRaceBtn').textContent = 'Host will start soon...';
+      }
+    }
+
+    // Listen for Cross-Tab Realtime Messages
+    channel.onmessage = (event) => {
+      const msg = event.data;
+      if (!msg || msg.senderId === MY_CLIENT_ID) return;
+      if (msg.roomCode !== state.roomCode) return;
+
+      if (msg.type === 'JOIN_REQ' && state.isHost) {
+        state.opponent = { ...msg.player, charIndex: 0, wpm: 0, finished: false, revealed: false };
+        state.isSimulatedOpponent = false;
+        renderGuestConnected();
+        showToast(`${msg.player.name} joined your room!`);
+
+        // Sync current track & host info back to guest
+        channel.postMessage({
+          type: 'ROOM_SYNC',
+          roomCode: state.roomCode,
+          senderId: MY_CLIENT_ID,
+          host: { id: MY_CLIENT_ID, name: state.handle, avatarIdx: state.avatarIdx },
+          track: getSelectedTrack()
+        });
+      }
+
+      if (msg.type === 'ROOM_SYNC' && !state.isHost) {
+        // Ensure custom track exists on guest side too
+        if (!TRACKS.find(t => t.id === msg.track.id)) TRACKS.unshift(msg.track);
+        state.selectedTrackId = msg.track.id;
+        state.opponent = { ...msg.host, charIndex: 0, wpm: 0, finished: false, revealed: false };
+
+        $('roomTrackTitle').textContent = `${msg.track.title} — ${msg.track.artist}`;
+        $('hostSlotAvatar').innerHTML = AVATARS[msg.host.avatarIdx];
+        $('hostSlotName').textContent = msg.host.name;
+        $('guestSlot').classList.add('ready');
+        $('guestSlotAvatar').innerHTML = AVATARS[state.avatarIdx];
+        $('guestSlotName').textContent = state.handle + ' (You)';
+        $('guestSlotStatus').textContent = 'Connected • Ready';
+        $('guestSlotStatus').style.color = 'var(--green)';
+        $('startFriendRaceBtn').textContent = 'Waiting for Host to Start...';
+        showToast(`Connected to ${msg.host.name}'s room!`);
+      }
+
+      if (msg.type === 'RACE_START') {
+        prepareAndStartArena();
+      }
+
+      if (msg.type === 'PROGRESS' && state.opponent) {
+        state.opponent.charIndex = msg.charIndex;
+        state.opponent.wpm = msg.wpm;
+        state.opponent.finished = msg.finished;
+        updateOpponentVisuals();
+      }
+
+      if (msg.type === 'CHAT_MSG') {
+        appendChatMessage(msg.text, 'them');
+        playTone(620, 0.05, 'triangle', 0.03);
+      }
+
+      if (msg.type === 'REVEAL_REQ' && state.opponent) {
+        state.opponent.revealed = true;
+        checkMutualReveal();
+      }
+    };
+
+    // =========================================================================
+    // 7. STRANGER MATCHMAKING LOGIC
+    // =========================================================================
+    function startStrangerMatchmaking() {
+      saveHandle();
+      state.mode = 'stranger';
+      state.roomCode = null;
+      state.isHost = true;
+      state.isSimulatedOpponent = true;
+
+      showView('view-waiting');
+      $('friendRoomUI').style.display = 'none';
+      $('strangerSearchUI').style.display = 'block';
+
+      const pick = STRANGER_POOL[Math.floor(Math.random() * STRANGER_POOL.length)];
+      $('searchStatusText').textContent = `Looking for someone vibing to "${getSelectedTrack().title}"...`;
+
+      setTimeout(() => {
+        if (!$('view-waiting').classList.contains('active')) return;
+        state.opponent = {
+          id: 'stranger_' + Date.now(),
+          name: pick.name,
+          avatarIdx: pick.avatarIdx,
+          tag: pick.tag,
+          charIndex: 0,
+          wpm: 0,
+          finished: false,
+          revealed: false
+        };
+        $('searchStatusText').textContent = `Matched with @${pick.name} (${pick.tag})! Syncing beat...`;
+        playTone(580, 0.08, 'sine', 0.05);
+        setTimeout(() => prepareAndStartArena(), 900);
+      }, 1600);
+    }
+
+    // =========================================================================
+    // 8. CORE TYPING ENGINE & RACE ARENA
+    // =========================================================================
+    function prepareAndStartArena() {
+      clearTimers();
+      const track = getSelectedTrack();
+
+      state.lines = track.lines.map(l => l.replace(/[’‘]/g, "'").replace(/[“”]/g, '"').trim()).filter(Boolean);
+      state.totalChars = state.lines.reduce((acc, l) => acc + l.length, 0);
+      state.lineIdx = 0;
+      state.charIdx = 0;
+      state.globalTypedChars = 0;
+      state.correctKeystrokes = 0;
+      state.totalKeystrokes = 0;
+      state.combo = 0;
+      state.maxCombo = 0;
+      state.score = 0;
+      state.raceActive = false;
+      state.startTime = null;
+      state.meRevealed = false;
+
+      if (state.opponent) {
+        state.opponent.charIndex = 0;
+        state.opponent.wpm = 0;
+        state.opponent.finished = false;
+        state.opponent.revealed = false;
+      }
+
+      // Arena Header & Track Bar Setup
+      $('arenaTrackTitle').textContent = `${track.title} — ${track.artist}`;
+      const modeNames = {
+        solo: 'Solo Chill Session',
+        friend: `Friend Room • ${state.roomCode}`,
+        stranger: `1v1 Anonymous Match • @${state.opponent?.name || ''}`
+      };
+      $('arenaModeLabel').textContent = modeNames[state.mode];
+
+      $('meTrackAvatar').innerHTML = AVATARS[state.avatarIdx];
+      $('meTrackName').textContent = state.handle;
+      $('meTrackFill').style.width = '0%';
+      $('meTrackWpm').textContent = '0 WPM';
+
+      const hasOpponent = state.mode !== 'solo' && state.opponent;
+      $('oppTrackRow').style.display = hasOpponent ? 'grid' : 'none';
+      if (hasOpponent) {
+        $('oppTrackAvatar').innerHTML = AVATARS[state.opponent.avatarIdx];
+        $('oppTrackName').textContent = state.opponent.name;
+        $('oppTrackFill').style.width = '0%';
+        $('oppTrackWpm').textContent = '0 WPM';
+      }
+
+      // Optional YouTube Embed
+      if (track.youtubeId) {
+        $('ytWrap').classList.add('visible');
+        $('toggleVideoBtn').style.display = 'inline-flex';
+        $('toggleVideoBtn').textContent = 'Hide Video';
+        $('ytFrame').src = `https://www.youtube.com/embed/${track.youtubeId}?autoplay=1&rel=0`;
+      } else {
+        $('ytWrap').classList.remove('visible');
+        $('toggleVideoBtn').style.display = 'none';
+        $('ytFrame').src = '';
+      }
+
+      updateHUD();
+      renderTypingLines();
+      showView('view-arena');
+
+      // 3-2-1 Countdown
+      runCountdown(() => {
+        state.raceActive = true;
+        state.startTime = Date.now();
+        $('mobileInput').focus();
+        state.timerInterval = setInterval(updateHUD, 250);
+
+        if (hasOpponent && state.isSimulatedOpponent) {
+          startGhostOpponent();
+        }
+      });
+    }
+
+    function runCountdown(onComplete) {
+      const overlay = $('countdownOverlay');
+      const numEl = $('countdownNum');
+      overlay.classList.add('show');
+      let count = 3;
+      numEl.textContent = count;
+      playTone(440, 0.07);
+
+      const cd = setInterval(() => {
+        count--;
+        if (count > 0) {
+          numEl.textContent = count;
+          playTone(440, 0.07);
+        } else if (count === 0) {
+          numEl.textContent = 'TYPE!';
+          playTone(720, 0.12);
+        } else {
+          clearInterval(cd);
+          overlay.classList.remove('show');
+          onComplete();
+        }
+      }, 750);
+    }
+
+    function getGlobalLineOffset(lineIndex) {
+      let sum = 0;
+      for (let i = 0; i < lineIndex; i++) sum += state.lines[i].length;
+      return sum;
+    }
+
+    function renderTypingLines() {
+      const current = state.lines[state.lineIdx] || '';
+      const prev = state.lines[state.lineIdx - 1] || '';
+      const next = state.lines[state.lineIdx + 1] || '';
+
+      $('lineCounter').textContent = `Line ${Math.min(state.lineIdx + 1, state.lines.length)} / ${state.lines.length}`;
+      $('prevLine').textContent = prev;
+      $('nextLine').textContent = next;
+
+      const lineOffset = getGlobalLineOffset(state.lineIdx);
+      const oppLocalIdx = (state.mode !== 'solo' && state.opponent)
+        ? state.opponent.charIndex - lineOffset
+        : -999;
+
+      let html = '';
+      for (let i = 0; i < current.length; i++) {
+        let cls = 'char';
+        if (i < state.charIdx) cls += ' correct';
+        else if (i === state.charIdx) cls += ' current';
+        if (i === oppLocalIdx) cls += ' opp-cursor';
+
+        const ch = current[i] === ' ' ? '&nbsp;' : escapeHtml(current[i]);
+        html += `<span class="${cls}">${ch}</span>`;
+      }
+      $('activeLine').innerHTML = html;
+
+      // Combo badge
+      const badge = $('comboBadge');
+      if (state.combo >= 5) {
+        badge.textContent = `${state.combo}x COMBO`;
+        badge.classList.add('show');
+      } else {
+        badge.classList.remove('show');
+      }
+    }
+
+    function handleCharInput(key) {
+      if (!state.raceActive) return;
+
+      const currentLine = state.lines[state.lineIdx];
+      if (!currentLine) return;
+
+      if (key === 'Backspace') {
+        if (state.charIdx > 0) {
+          state.charIdx--;
+          state.globalTypedChars = Math.max(0, state.globalTypedChars - 1);
+          renderTypingLines();
+        }
+        return;
+      }
+
+      if (key.length !== 1) return;
+
+      state.totalKeystrokes++;
+      const expected = currentLine[state.charIdx];
+
+      if (key === expected) {
+        state.correctKeystrokes++;
+        state.charIdx++;
+        state.globalTypedChars++;
+        state.combo++;
+        if (state.combo > state.maxCombo) state.maxCombo = state.combo;
+        state.score += 10 + Math.min(20, Math.floor(state.combo / 5) * 2);
+
+        playTone(320 + Math.min(260, state.combo * 8), 0.035, 'sine', 0.03);
+
+        // Advance line if finished
+        if (state.charIdx >= currentLine.length) {
+          state.lineIdx++;
+          state.charIdx = 0;
+          if (state.lineIdx >= state.lines.length) {
+            finishRace();
+            return;
+          }
+        }
+        renderTypingLines();
+        updateHUD();
+        broadcastMyProgress(false);
+      } else {
+        state.combo = 0;
+        playTone(150, 0.07, 'sawtooth', 0.035);
+        const stage = $('typingStage');
+        stage.classList.remove('shake');
+        void stage.offsetWidth;
+        stage.classList.add('shake');
+
+        const curSpan = $('activeLine').querySelector('.char.current');
+        if (curSpan) curSpan.classList.add('wrong');
+        updateHUD();
+      }
+    }
+
+    function calcWpm(charsTyped) {
+      if (!state.startTime) return 0;
+      const mins = Math.max((Date.now() - state.startTime) / 60000, 1 / 60);
+      return Math.round((charsTyped / 5) / mins);
+    }
+
+    function updateHUD() {
+      const wpm = calcWpm(state.correctKeystrokes);
+      const acc = state.totalKeystrokes === 0 ? 100 : Math.round((state.correctKeystrokes / state.totalKeystrokes) * 100);
+      const elapsedSec = state.startTime ? Math.floor((Date.now() - state.startTime) / 1000) : 0;
+      const mm = Math.floor(elapsedSec / 60);
+      const ss = String(elapsedSec % 60).padStart(2, '0');
+
+      $('hudWpm').textContent = wpm;
+      $('hudAcc').textContent = `${acc}%`;
+      $('hudScore').textContent = state.score;
+      $('hudTime').textContent = `${mm}:${ss}`;
+
+      const pct = state.totalChars ? Math.min(100, (state.globalTypedChars / state.totalChars) * 100) : 0;
+      $('meTrackFill').style.width = `${pct}%`;
+      $('meTrackWpm').textContent = `${wpm} WPM`;
+    }
+
+    function broadcastMyProgress(finished) {
+      if (state.mode !== 'friend' || !state.roomCode || state.isSimulatedOpponent) return;
+      const now = Date.now();
+      if (!finished && now - state.lastBroadcastAt < 110) return;
+      state.lastBroadcastAt = now;
+
+      channel.postMessage({
+        type: 'PROGRESS',
+        roomCode: state.roomCode,
+        senderId: MY_CLIENT_ID,
+        charIndex: state.globalTypedChars,
+        wpm: calcWpm(state.correctKeystrokes),
+        finished
+      });
+    }
+
+    // Human-like Ghost Engine (Stranger mode & 1-Tab Friend Test)
+    function startGhostOpponent() {
+      const tierWpm = { chill: 38, balanced: 56, pro: 78 }[state.tier] || 52;
+      const baseCharsPerSec = (tierWpm * 5) / 60;
+
+      state.ghostInterval = setInterval(() => {
+        if (!state.raceActive || !state.opponent || state.opponent.finished) return;
+        // Natural typing jitter + tiny breath pauses
+        const chance = Math.random();
+        if (chance < 0.14) return; // slight pause
+        const step = Math.random() < 0.75 ? 1 : 2;
+        state.opponent.charIndex = Math.min(state.totalChars, state.opponent.charIndex + step);
+        state.opponent.wpm = calcWpm(state.opponent.charIndex);
+        if (state.opponent.charIndex >= state.totalChars) {
+          state.opponent.finished = true;
+        }
+        updateOpponentVisuals();
+      }, Math.max(85, Math.round(1000 / baseCharsPerSec)));
+    }
+
+    function updateOpponentVisuals() {
+      if (!state.opponent) return;
+      const pct = state.totalChars ? Math.min(100, (state.opponent.charIndex / state.totalChars) * 100) : 0;
+      $('oppTrackFill').style.width = `${pct}%`;
+      $('oppTrackWpm').textContent = `${state.opponent.wpm} WPM`;
+      renderTypingLines();
+    }
+
+    function finishRace() {
+      state.raceActive = false;
+      clearTimers();
+      broadcastMyProgress(true);
+      playTone(523, 0.12);
+      setTimeout(() => playTone(659, 0.12), 110);
+      setTimeout(() => playTone(784, 0.18), 220);
+
+      const finalWpm = calcWpm(state.correctKeystrokes);
+      const finalAcc = state.totalKeystrokes === 0 ? 100 : Math.round((state.correctKeystrokes / state.totalKeystrokes) * 100);
+
+      if (finalWpm > state.personalBest) {
+        state.personalBest = finalWpm;
+        localStorage.setItem('nitchat_pb', String(finalWpm));
+        $('pbLabel').textContent = `Best: ${finalWpm} WPM`;
+      }
+
+      $('resWpm').textContent = finalWpm;
+      $('resAcc').textContent = `${finalAcc}%`;
+      $('resCombo').textContent = `${state.maxCombo}x`;
+      $('resScore').textContent = state.score;
+
+      const grid = $('resultGrid');
+      const chatCard = $('chatCard');
+
+      if (state.mode === 'solo') {
+        grid.classList.add('solo-only');
+        chatCard.style.display = 'none';
+        $('resultBadge').textContent = 'SOLO CHILL COMPLETE';
+        $('resultTitle').textContent = finalWpm >= state.personalBest ? 'New Personal Best!' : 'Smooth Session!';
+        $('resultSubtitle').textContent = `You finished "${getSelectedTrack().title}" at ${finalWpm} WPM with ${finalAcc}% accuracy.`;
+      } else {
+        grid.classList.remove('solo-only');
+        chatCard.style.display = 'flex';
+        const won = !state.opponent?.finished;
+        $('resultBadge').textContent = state.mode === 'friend' ? `FRIEND ROOM • ${state.roomCode}` : '1V1 ANONYMOUS RACE';
+        $('resultTitle').textContent = won ? 'You Won the Race! 🏆' : 'Close Finish!';
+        $('resultSubtitle').textContent = won
+          ? `You out-typed @${state.opponent.name} on "${getSelectedTrack().title}".`
+          : `@${state.opponent.name} edged ahead — challenge them again or vibe in chat!`;
+
+        setupPostMatchChat();
+      }
+
+      $('ytFrame').src = '';
+      showView('view-result');
+    }
+
+    // =========================================================================
+    // 9. POST-MATCH NITCHAT ROOM
+    // =========================================================================
+    function setupPostMatchChat() {
+      $('chatOppAvatar').innerHTML = AVATARS[state.opponent.avatarIdx];
+      $('chatOppName').textContent = `@${state.opponent.name}`;
+      $('chatStatus').textContent = state.mode === 'friend' ? 'Private Room Chat' : 'Anonymous NitChat • Identity Hidden';
+      $('revealBtn').style.display = state.mode === 'stranger' ? 'inline-flex' : 'none';
+      $('revealBtn').textContent = 'Mutual Reveal';
+      $('revealBtn').disabled = false;
+
+      $('chatMessages').innerHTML = '';
+      appendChatMessage(`You and @${state.opponent.name} both vibed to "${getSelectedTrack().title}".`, 'sys');
+
+      if (state.isSimulatedOpponent) {
+        setTimeout(() => {
+          appendChatMessage(`gg! that track hits different when you type along to it 🔥`, 'them');
+        }, 700);
+      }
+    }
+
+    function appendChatMessage(text, who) {
+      const div = document.createElement('div');
+      div.className = `msg ${who}`;
+      div.textContent = text;
+      $('chatMessages').appendChild(div);
+      $('chatMessages').scrollTop = $('chatMessages').scrollHeight;
+    }
+
+    function checkMutualReveal() {
+      if (state.meRevealed && state.opponent?.revealed) {
+        $('chatStatus').textContent = 'Identities Mutually Revealed ✓';
+        appendChatMessage(`Mutual Reveal unlocked! Connected with @${state.opponent.name} on NitChat.`, 'sys');
+      }
+    }
+
+    function clearTimers() {
+      clearInterval(state.timerInterval);
+      clearInterval(state.ghostInterval);
+    }
+
+    function saveHandle() {
+      const val = $('handleInput').value.trim();
+      if (val) {
+        state.handle = val;
+        localStorage.setItem('nitchat_handle', val);
+      }
+    }
+
+    // =========================================================================
+    // 10. EVENT LISTENERS & INITIALIZATION
+    // =========================================================================
+    document.querySelectorAll('.mode-card').forEach(card => {
+      card.addEventListener('click', () => {
+        state.mode = card.dataset.mode;
+        updateModeUI();
+      });
+    });
+
+    $('tierPicker').querySelectorAll('.seg-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.tier = btn.dataset.tier;
+        $('tierPicker').querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    $('soundToggleBtn').addEventListener('click', () => {
+      state.soundOn = !state.soundOn;
+      $('soundToggleBtn').textContent = `Sound: ${state.soundOn ? 'ON' : 'OFF'}`;
+      $('soundToggleBtn').classList.toggle('active', state.soundOn);
+    });
+
+    $('goHomeBtn').addEventListener('click', () => {
+      clearTimers();
+      state.raceActive = false;
+      $('ytFrame').src = '';
+      showView('view-lobby');
+    });
+
+    // Mode Actions
+    $('startSoloBtn').addEventListener('click', () => {
+      saveHandle();
+      state.mode = 'solo';
+      state.opponent = null;
+      prepareAndStartArena();
+    });
+
+    $('createRoomBtn').addEventListener('click', createFriendRoom);
+    $('joinRoomBtn').addEventListener('click', () => joinFriendRoom($('joinCodeInput').value));
+    $('findStrangerBtn').addEventListener('click', startStrangerMatchmaking);
+
+    $('copyCodeBtn').addEventListener('click', () => {
+      const shareUrl = `${window.location.origin}${window.location.pathname}?room=${state.roomCode}`;
+      navigator.clipboard?.writeText(shareUrl).catch(() => {});
+      showToast(`Copied room link (${state.roomCode})!`);
+    });
+
+    $('simulateFriendBtn').addEventListener('click', () => {
+      state.isSimulatedOpponent = true;
+      state.opponent = {
+        id: 'sim_friend',
+        name: 'bestie_demo',
+        avatarIdx: (state.avatarIdx + 1) % AVATARS.length,
+        charIndex: 0,
+        wpm: 0,
+        finished: false,
+        revealed: false
+      };
+      renderGuestConnected();
+      showToast('Demo friend joined! Click Start Race Now.');
+    });
+
+    $('startFriendRaceBtn').addEventListener('click', () => {
+      if (!state.opponent) return;
+      if (!state.isSimulatedOpponent) {
+        channel.postMessage({
+          type: 'RACE_START',
+          roomCode: state.roomCode,
+          senderId: MY_CLIENT_ID
+        });
+      }
+      prepareAndStartArena();
+    });
+
+    $('leaveRoomBtn').addEventListener('click', () => {
+      state.roomCode = null;
+      state.opponent = null;
+      history.replaceState(null, '', window.location.pathname);
+      showView('view-lobby');
+    });
+
+    $('exitArenaBtn').addEventListener('click', () => {
+      clearTimers();
+      state.raceActive = false;
+      $('ytFrame').src = '';
+      showView('view-lobby');
+    });
+
+    $('toggleVideoBtn').addEventListener('click', () => {
+      const visible = $('ytWrap').classList.toggle('visible');
+      $('toggleVideoBtn').textContent = visible ? 'Hide Video' : 'Show Video';
+    });
+
+    $('playAgainBtn').addEventListener('click', () => {
+      if (state.mode === 'friend' && state.isHost && !state.isSimulatedOpponent) {
+        channel.postMessage({ type: 'RACE_START', roomCode: state.roomCode, senderId: MY_CLIENT_ID });
+      }
+      prepareAndStartArena();
+    });
+
+    $('backLobbyBtn').addEventListener('click', () => showView('view-lobby'));
+
+    // Post-Match Chat
+    $('chatForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const text = $('chatInput').value.trim();
+      if (!text) return;
+      $('chatInput').value = '';
+      appendChatMessage(text, 'me');
+
+      if (state.mode === 'friend' && !state.isSimulatedOpponent) {
+        channel.postMessage({
+          type: 'CHAT_MSG',
+          roomCode: state.roomCode,
+          senderId: MY_CLIENT_ID,
+          text
+        });
+      } else if (state.isSimulatedOpponent) {
+        const replies = [
+          'haha nice speed! wanna run another track?',
+          'love the vibe on this one honestly ✨',
+          'my fingers almost slipped on the last line 😂',
+          'cool matching with you on NitChat!'
+        ];
+        setTimeout(() => {
+          appendChatMessage(replies[Math.floor(Math.random() * replies.length)], 'them');
+        }, 750);
+      }
+    });
+
+    $('revealBtn').addEventListener('click', () => {
+      state.meRevealed = true;
+      $('revealBtn').textContent = 'Reveal Requested...';
+      $('revealBtn').disabled = true;
+      if (state.isSimulatedOpponent) {
+        setTimeout(() => {
+          state.opponent.revealed = true;
+          checkMutualReveal();
+        }, 900);
+      } else {
+        channel.postMessage({ type: 'REVEAL_REQ', roomCode: state.roomCode, senderId: MY_CLIENT_ID });
+        checkMutualReveal();
+      }
+    });
+
+    // Global Keyboard Typing + Mobile Focus
+    $('typingStage').addEventListener('click', () => $('mobileInput').focus());
+
+    document.addEventListener('keydown', (e) => {
+      if (!state.raceActive) return;
+      const tag = document.activeElement?.tagName;
+      if (tag === 'INPUT' && document.activeElement.id !== 'mobileInput') return;
+      if (tag === 'TEXTAREA') return;
+      if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+      if (e.key === ' ' || e.key === 'Backspace') e.preventDefault();
+      handleCharInput(e.key);
+    });
+
+    // Mobile virtual keyboard support
+    $('mobileInput').addEventListener('input', (e) => {
+      if (!state.raceActive) return;
+      const val = e.target.value;
+      if (val) {
+        for (const ch of val) handleCharInput(ch);
+        e.target.value = '';
+      }
+    });
+
+    // Custom Track Modal
+    $('openCustomModalBtn').addEventListener('click', () => $('customModal').classList.add('open'));
+    $('closeCustomModalBtn').addEventListener('click', () => $('customModal').classList.remove('open'));
+    $('saveCustomTrackBtn').addEventListener('click', () => {
+      const title = $('customTitle').value.trim() || 'Custom Track';
+      const artist = $('customArtist').value.trim() || 'User Upload';
+      const ytId = extractYoutubeId($('customYt').value);
+      const lines = $('customLyrics').value.split('\n').map(l => l.trim()).filter(Boolean);
+
+      if (lines.length < 1) {
+        showToast('Paste at least 1 line of lyrics');
+        return;
+      }
+
+      const newTrack = {
+        id: 'custom_' + Date.now(),
+        title,
+        artist,
+        tag: ytId ? 'Custom + YT' : 'Custom',
+        youtubeId: ytId,
+        lines
+      };
+      TRACKS.unshift(newTrack);
+      state.selectedTrackId = newTrack.id;
+      renderTracks();
+      $('customModal').classList.remove('open');
+      $('customTitle').value = '';
+      $('customArtist').value = '';
+      $('customYt').value = '';
+      $('customLyrics').value = '';
+      showToast(`Added "${title}"!`);
+    });
+
+    // Boot
+    (function init() {
+      $('handleInput').value = state.handle;
+      $('pbLabel').textContent = `Best: ${state.personalBest} WPM`;
+      renderAvatars();
+      renderTracks();
+      updateModeUI();
+
+      // Auto-join if URL has ?room=NIT-XXX
+      const params = new URLSearchParams(window.location.search);
+      const roomParam = params.get('room');
+      if (roomParam) {
+        state.mode = 'friend';
+        updateModeUI();
+        $('joinCodeInput').value = roomParam.toUpperCase();
+        joinFriendRoom(roomParam);
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+/* MatchmakingModal — Radar & VS Handshake */
+.mm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(9, 10, 15, 0.86);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  animation: fadeIn 0.2s ease;
+}
+
+.mm-card {
+  max-width: 420px;
+  width: 100%;
+  padding: 34px 28px;
+  border-radius: 26px;
+  text-align: center;
+}
+
+/* State 1: Searching Radar */
+.mm-searching {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+
+.radar-wrap {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  display: grid;
+  place-items: center;
+}
+
+.radar-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  border: 1.5px solid rgba(124, 92, 255, 0.6);
+  animation: radarExpand 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+.radar-ring:nth-child(2) { animation-delay: 0.65s; }
+.radar-ring:nth-child(3) { animation-delay: 1.3s; }
+
+@keyframes radarExpand {
+  0% { transform: scale(0.6); opacity: 0.85; }
+  100% { transform: scale(2.1); opacity: 0; }
+}
+
+.radar-avatar {
+  position: relative;
+  z-index: 2;
+  width: 66px;
+  height: 66px;
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: 0 0 0 2px #7C5CFF, 0 14px 30px rgba(124, 92, 255, 0.35);
+}
+
+.mm-text h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.mm-text p {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.mm-song {
+  color: #38BDF8;
+  font-weight: 600;
+}
+
+/* State 2: Match Found */
+.mm-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  animation: fadeUp 0.25s ease;
+}
+
+.mm-found-badge {
+  display: inline-flex;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: rgba(52, 211, 153, 0.15);
+  color: #6ee7b7;
+}
+
+.mm-vs-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.mm-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.mm-vs-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.mm-vs-avatar.player-ring {
+  box-shadow: 0 0 0 2px #7C5CFF;
+}
+
+.mm-vs-avatar.opp-ring {
+  box-shadow: 0 0 0 2px #FB7185;
+}
+
+.mm-vs-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  max-width: 96px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mm-vs-name.opp-name {
+  color: #fda4af;
+}
+
+.mm-vs-text {
+  font-size: 18px;
+  font-weight: 900;
+  font-style: italic;
+  color: var(--dim);
+}
+
+.mm-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.mm-tag {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  background: rgba(124, 92, 255, 0.15);
+  color: #C4B5FD;
+  border: 1px solid rgba(124, 92, 255, 0.3);
+}
+
+.mm-sync-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.mm-spinner {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 2px solid rgba(56, 189, 248, 0.25);
+  border-top-color: #38BDF8;
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+

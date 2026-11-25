@@ -1,0 +1,152 @@
+/* SongSearchBar */
+.yt-search-wrap {
+  position: relative;
+  max-width: 680px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.yt-search-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 6px 6px 16px;
+  border-radius: 16px;
+  background: rgba(17, 19, 28, 0.85);
+  border: 1px solid rgba(124, 92, 255, 0.35);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 12px 32px -12px rgba(124, 92, 255, 0.35);
+}
+
+.yt-search-icon {
+  color: #A78BFA;
+  flex-shrink: 0;
+}
+
+.yt-search-input {
+  flex: 1;
+  font-size: 14px;
+  color: var(--text);
+  background: transparent;
+  border: none;
+  outline: none;
+  min-width: 0;
+}
+
+.yt-search-input::placeholder {
+  color: var(--muted);
+}
+
+.yt-search-btn {
+  padding: 10px 18px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #7C5CFF 0%, #5B3DF5 100%);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: 0.18s;
+  flex-shrink: 0;
+}
+
+.yt-search-btn:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.yt-search-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.yt-results-dropdown {
+  margin-top: 10px;
+  padding: 12px;
+  border-radius: 18px;
+  text-align: left;
+  animation: fadeUp 0.2s ease;
+}
+
+.yt-results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  padding: 0 4px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  margin-bottom: 8px;
+}
+
+.yt-close-btn {
+  color: var(--muted);
+  cursor: pointer;
+  padding: 2px 6px;
+}
+
+.yt-close-btn:hover { color: #fff; }
+
+.yt-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 290px;
+  overflow-y: auto;
+}
+
+.yt-result-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: 0.16s;
+}
+
+.yt-result-item:hover {
+  background: rgba(124, 92, 255, 0.12);
+  border-color: rgba(124, 92, 255, 0.35);
+}
+
+.yt-thumb {
+  width: 56px;
+  height: 36px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.yt-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.yt-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.yt-sub {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.yt-pick-pill {
+  padding: 5px 10px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(56, 189, 248, 0.14);
+  color: #38BDF8;
+  flex-shrink: 0;
+}
+

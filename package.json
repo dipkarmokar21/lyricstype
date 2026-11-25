@@ -1,0 +1,18 @@
+{
+  "name": "lyricstype",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NitChat LyricsType — Solo, Friend & 1v1 Anonymous Lyrics Typing Race",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "build:client": "cd client && npm run build",
+    "build:server": "cd server && npm run build",
+    "start:server": "cd server && npm start"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}
+

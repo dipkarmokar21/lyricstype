@@ -1,0 +1,16 @@
+[build]
+  base = "client"
+  command = "npm run build"
+  publish = "dist"
+
+# SPA fallback for nitchat.com/type/*
+[[redirects]]
+  from = "/type/*"
+  to = "/type/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
